@@ -1,6 +1,7 @@
 from .controller import MLDaliController
 from .const import LIGHT_SWITCHED_ON, LIGHT_SWITCHED_OFF, UNKNOWN_EVENT
-import time
+#import time
+import asyncio
 import logging
 _LOGGER = logging.getLogger(__name__)
 
@@ -16,13 +17,15 @@ class MLDaliLight():
     
     async def turn_on(self):
         cmd = bytearray([0x01, (self.address*2)+1, 5, 0xC1])
-        time.sleep(.1) #This delay ensures that the command doesn't collapse with other commands being send on the bus
+        #time.sleep(.1) 
+        await asyncio.sleep(.1) #This delay ensures that the command doesn't collapse with other commands being send on the bus
         await self._controller.sendCmd(cmd)
 
     
     async def turn_off(self):
         cmd = bytearray([0x01, (self.address*2)+1, 0, 0xC1])
-        time.sleep(.1)
+        #time.sleep(.1)
+        await asyncio.sleep(.1)
         await self._controller.sendCmd(cmd)
     
     def status_update(self, rx):
